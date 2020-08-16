@@ -1,0 +1,115 @@
+<?php
+/**
+ *  * @author Eng.Asma Hawari
+ *  * @package CodaTrip_RequestBook
+ */
+?>
+<div class="requestBook">
+        <div class="container-fluid">
+            <div class="row request_button-container">
+                <button  class="request_button col-sm-3 col-md-3 col-lg-4" id="request"><a href="javascript:void(0)"  class="request_link"><?= $block->escapeHtml(__("Request A Book")) ?></a></button>
+            </div><br>
+        </div>
+</div>
+
+<?php
+/** @var \Magento\Contact\Block\ContactForm $block */
+?>
+<div id="popup" style="display: none;" class="events_popup">
+    <form class="form request-form"
+          action="<?= $block->getUrl("request/form/view") ?>"
+          id="request-form"
+          name="requestform"
+          method="post"
+          data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+          data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset">
+            <legend class="legend"><span><?= $block->escapeHtml(__('Request A Book')) ?></span></legend>
+            <br/>
+            <div class="field note no-label"><?= $block->escapeHtml(__('Request A Book ')) ?></div>
+            <div class="field name required">
+                <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+                <div class="control">
+                    <input name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
+                           value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()) ?>"
+                           class="input-text" type="text" data-validate="{required:true}"/>
+                </div>
+            </div>
+            <div class="field email required">
+                <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+                <div class="control">
+                    <input name="email" id="email" title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                           value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()) ?>"
+                           class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
+                </div>
+            </div>
+            <div class="field telephone">
+                <label class="label optional-label" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
+                <div class="control">
+                    <input name="telephone" id="telephone" title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                           value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')) ?>"
+                           class="input-text" type="text"/>
+                </div>
+            </div>
+            <div class="field message required">
+                <label class="label optional-label"
+                       for="message"><span><?= $block->escapeHtml(__('Message')) ?></span></label>
+                <div class="control">
+                    <textarea name="message" id="message" placeholder="Please Type your Enquiry"
+                              title="<?= $block->escapeHtmlAttr(__('Message')) ?>" class="input-text"
+                              cols="5" rows="3"
+                              data-validate="{required:false}"><?= $block->escapeHtml($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('message')) ?></textarea>
+                </div>
+            </div>
+            <?= $block->getChildHtml('form.additional.info') ?>
+        </fieldset>
+    </form>
+</div>
+<script type="text/javascript">
+    require(
+        [
+            'jquery',
+            'Magento_Ui/js/model/messageList',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function ($, messageList, modal) {
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                modalClass: 'add-modal-class',
+                buttons: [{
+                    text: 'submit',
+                    click: function () {
+                        var form_data = {};
+                        form_data['name'] = document.querySelector("#name").value;
+                        form_data['email'] = document.querySelector("#email").value;
+                        form_data['telephone'] = document.querySelector('#telephone').value;
+                        form_data['comment'] = document.querySelector("#comment").value;
+                        console.log("form data !" + form_data.telephone);
+                        jQuery.ajax({
+                            url: "<?php echo $block->getUrl("request/form/view") ?>",
+                            type: 'POST',
+                            data: form_data,
+                            success: function (response) {
+                                console.log(response);
+                                $('#popup').modal('closeModal');
+                            },
+                            error: function (result) {
+                                console.log('no response !');
+                            }
+                        });
+                    }
+                }],
+            };
+            var popup = modal(options, $('#popup'));
+            $("#request").on("click", function () {
+                $('#popup').modal('openModal');
+            });
+        }
+    );
+</script>
+
+
+
+
