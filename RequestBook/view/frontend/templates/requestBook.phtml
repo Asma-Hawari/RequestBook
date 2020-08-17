@@ -85,7 +85,7 @@
                         form_data['name'] = document.querySelector("#name").value;
                         form_data['email'] = document.querySelector("#email").value;
                         form_data['telephone'] = document.querySelector('#telephone').value;
-                        form_data['comment'] = document.querySelector("#comment").value;
+                        form_data['message'] = document.querySelector("#message").value;
                         console.log("form data !" + form_data.telephone);
                         jQuery.ajax({
                             url: "<?php echo $block->getUrl("request/form/view") ?>",

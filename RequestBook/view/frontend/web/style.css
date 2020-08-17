@@ -3,6 +3,9 @@
 }
 .request_button {
     background: none;
+    border-radius: 40px;
+    font-size: 30px;
+    padding: 20px;
 }
 .request_link{
     text-decoration: none;

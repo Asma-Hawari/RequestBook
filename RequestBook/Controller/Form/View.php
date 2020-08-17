@@ -12,6 +12,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
@@ -85,11 +86,12 @@ class View extends \Magento\Contact\Controller\Index implements HttpPostActionIn
             );
             $this->dataPersistor->set('request_book', $this->getRequest()->getParams());
         }
-        return $this->resultRedirectFactory->create()->setPath('*/*/');
+
+        return $this->resultRedirectFactory->create()->setPath('home');
     }
 
     /**
-     * @param array $post Post data from contact form
+     * @param array $post
      * @return void
      */
     private function sendEmail($post)
@@ -110,8 +112,8 @@ class View extends \Magento\Contact\Controller\Index implements HttpPostActionIn
         if (trim($request->getParam('name')) === '') {
             throw new LocalizedException(__('Enter the Name and try again.'));
         }
-        if (trim($request->getParam('comment')) === '') {
-            throw new LocalizedException(__('Enter the comment and try again.'));
+        if (trim($request->getParam('message')) === '') {
+            throw new LocalizedException(__('Enter your message and try again.'));
         }
         if (false === \strpos($request->getParam('email'), '@')) {
             throw new LocalizedException(__('The email address is invalid. Verify the email address and try again.'));
