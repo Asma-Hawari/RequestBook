@@ -56,11 +56,11 @@ class Mail
      * @param array $variables
      * @return void
      */
-    public function send($filePath,$fileName ,$replyTo, array $variables)
+    public function send($replyTo,array $variables)
     {
         $emailTemplate = null;
       
-            $emailTemplate = $this->contactsConfig->emailTemplate();
+        $emailTemplate = $this->contactsConfig->emailTemplate();
 
         /** @see \Magento\Contact\Controller\Index\Post::validatedParams() */
         $replyToName = !empty($variables['data']['name']) ? $variables['data']['name'] : null;
